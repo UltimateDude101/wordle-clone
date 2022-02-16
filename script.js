@@ -98,8 +98,8 @@ onKeyPress = function (event) {
 
 const currentSolutionIndex = moment().diff(moment("2/16/2022", "MM-DD-YYYY"), 'days');
 
-Promise.all([fetch('word-list.txt'), fetch('solution-list.txt')]).then(responses => responses.map(r => r.text().split('\n'))).then(files => {
-  guessList = files[0]
-  solution = files[1][currentSolutionIndex]
+Promise.all([fetch('word-list.txt'), fetch('solution-list.txt')]).then(rs => Promise.all(rs.map(r => r.text()))).then(rs => rs.map(r => r.split('\n'))).then(files => {
+  guessList = files[0].split('\n')
+  solution = files[1].split('\n')[currentSolutionIndex]
   window.addEventListener("keydown", onKeyPress, true);
 })
