@@ -96,7 +96,7 @@ onKeyPress = function (event) {
 
 }
 
-const currentSolutionIndex = moment().diff(moment("06/17/2021", "MM-DD-YYYY"), 'days');
+const currentSolutionIndex = moment().diff(moment("06/18/2021", "MM-DD-YYYY"), 'days');
 
 console.log(currentSolutionIndex);
 
