@@ -12,7 +12,7 @@ for (let i = 0; i < 6; i++) {
     boardEl.appendChild(row)
 }
 
-let solution = 'codes'
+let solution;
 
 let guessList = ['codes', 'opens', 'plays', 'plate', 'opooo', 'ooooo']
 
@@ -37,8 +37,6 @@ onKeyPress = function (event) {
   
   else if (event.key.length === 1 && /[a-zA-Z]/.test(event.key) && currCol < 5) {
     let letter = event.key.toUpperCase();
-
-    console.log(letter);
 
     boardEl.children[currRow].children[currCol].innerText = letter;
     currCol++;
@@ -85,7 +83,6 @@ onKeyPress = function (event) {
       else {
         letterCount.set(word[i], prevLetterCount - 1);
         statuses[i] = 'misplaced';
-        console.log(letterCount);
       }
     }
 
@@ -99,11 +96,10 @@ onKeyPress = function (event) {
 
 }
 
-fetch('word-list.txt').then(guessResponse => guessResponse.text()).then(guessText => {
-  guessList = guessText.split('\n')
+const currentSolutionIndex = moment().diff(moment("2/16/2022", "MM-DD-YYYY"), 'days');
+
+Promise.all(fetch('word-list.txt'), fetch('solution-list.txt')).then(responses => responses.map(r => r.text().split('\n'))).then(files => {
+  guessList = files[0]
+  solution = files[1][currentSolutionIndex]
   window.addEventListener("keydown", onKeyPress, true);
 })
-
-
-
-console.log('gg ez')
