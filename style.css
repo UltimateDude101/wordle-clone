@@ -1,0 +1,32 @@
+html {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: black;
+    color: white;
+    margin: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.boardEl {
+    height: 50px;
+    width: 50px;
+    border: 1px solid gray;
+
+    text-align: center;
+
+    font-size: 20pt;
+}
+
+.correct {
+    background-color: green;
+}
+
+.misplaced {
+    background-color: goldenrod;
+}
+
+.incorrect {
+    background-color: red;
+}
