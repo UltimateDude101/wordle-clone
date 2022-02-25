@@ -1,4 +1,6 @@
-let boardEl = document.getElementById('board')
+const boardEl = document.getElementById('board')
+
+const keyboardEl = document.getElementById('keyboard')
 
 let row;
 for (let i = 0; i < 6; i++) {
@@ -12,6 +14,34 @@ for (let i = 0; i < 6; i++) {
     boardEl.appendChild(row)
 }
 
+const keys = ["qwertyuiop", "asdfghjkl⌫", "zxcvbnm↵"]
+
+for (let i = 0; i < 3; i++) {
+    row = document.createElement('div')
+    row.classList.add('keyboardRow')
+    for (let j = 0; j < keys[i].length; j++) {
+        el = document.createElement('button')
+        el.classList.add('keyboardEl')
+        el.innerText = keys[i][j]
+        el.addEventListener('click', onButtonPress);
+        row.appendChild(el)
+    }
+    keyboardEl.appendChild(row)
+}
+
+function onButtonPress(event) {
+  if (event.defaultPrevented) return;
+
+  let s = this.innerText;
+  if (s == '⌫') s = 'Backspace';
+  else if (s == '↵') s = 'Enter';
+
+  onInput(s);
+
+  event.preventDefault();
+}
+
+
 let solution;
 
 let guessList = ['codes', 'opens', 'plays', 'plate', 'opooo', 'ooooo']
@@ -21,22 +51,28 @@ let currCol = 0
 
 let gameIsEnded = false;
 
-onKeyPress = function (event) {
-  if (event.defaultPrevented || gameIsEnded || currRow >= 6) return;
+function onKeyPress (event) {
+  if (event.defaultPrevented) return;
 
-  if (event.key === 'Backspace') {
+  onInput(event.key);
+
+  event.preventDefault();
+}
+
+function onInput(key) {
+  if (gameIsEnded || currRow >= 6) return;
+
+  else if (key === 'Enter') handleGuess();
+
+  else if (key === 'Backspace') {
     if (currCol > 0) {
       currCol--;
       boardEl.children[currRow].children[currCol].innerText = '';
     }
   }
 
-  else if (event.key === 'Enter') {
-    handleGuess();
-  }
-  
-  else if (event.key.length === 1 && /[a-zA-Z]/.test(event.key) && currCol < 5) {
-    let letter = event.key.toUpperCase();
+  else if (key.length === 1 && /[a-zA-Z]/.test(key) && currCol < 5) {
+    let letter = key.toUpperCase();
 
     boardEl.children[currRow].children[currCol].innerText = letter;
     currCol++;
@@ -93,15 +129,11 @@ onKeyPress = function (event) {
     currCol = 0;
     currRow ++;
   }
-
 }
 
-const currentSolutionIndex = moment().diff(moment("06/18/2021", "MM-DD-YYYY"), 'days');
-
-console.log(currentSolutionIndex);
+window.addEventListener("keydown", onKeyPress, true);
 
 Promise.all([fetch('word-list.txt'), fetch('solution-list.txt')]).then(rs => Promise.all(rs.map(r => r.text()))).then(rs => rs.map(r => r.split('\n'))).then(files => {
   guessList = files[0]
   solution = files[1][currentSolutionIndex]
-  window.addEventListener("keydown", onKeyPress, true);
 })
