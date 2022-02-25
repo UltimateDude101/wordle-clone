@@ -133,7 +133,7 @@ function onInput(key) {
 
 window.addEventListener("keydown", onKeyPress, true);
 
-const currentSolutionIndex = moment().diff(moment("06/18/2021", "MM-DD-YYYY"), 'days');
+const currentSolutionIndex = moment().diff(moment("06/17/2021", "MM-DD-YYYY"), 'days');
 
 Promise.all([fetch('word-list.txt'), fetch('solution-list.txt')]).then(rs => Promise.all(rs.map(r => r.text()))).then(rs => rs.map(r => r.split('\n'))).then(files => {
   guessList = files[0]
